@@ -6,5 +6,4 @@ export interface IPost {
   author: ObjectId
   timestamp: Date
   publishDate: Date,
-  isPublished: boolean
 }
