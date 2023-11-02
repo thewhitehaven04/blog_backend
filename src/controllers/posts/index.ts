@@ -2,17 +2,22 @@ import { type Response, type Request } from 'express'
 import expressAsyncHandler from 'express-async-handler'
 import { type ICreatePostRequestDto } from './types'
 import { type IGenericResponse } from '../types'
+import { GenericError } from '../../appError'
 
 const createPost = expressAsyncHandler(
   (
     req: Request<any, any, ICreatePostRequestDto, any>,
     res: Response<IGenericResponse>
   ) => {
-    res.send({
+    res.json({
       success: true,
       errors: []
     })
   }
 )
 
-export { createPost }
+const error = expressAsyncHandler((req, res: Response<IGenericResponse>) => {
+  throw new GenericError('test')
+})
+
+export { createPost, error }

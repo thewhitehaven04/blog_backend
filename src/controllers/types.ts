@@ -1,8 +1,6 @@
-export interface IGenericError {
-  text: string
-}
+import { type IApplicationError } from '../typings/error'
 
 export interface IGenericResponse {
   success: boolean
-  errors: IGenericError[] | null 
+  errors: IApplicationError[] | null 
 }
