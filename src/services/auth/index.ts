@@ -7,8 +7,8 @@ import { compare } from 'bcrypt'
 async function auth(
   authRequest: IAuthRequestDto,
   success: (token: string) => void
-): Promise<string> {
-  const user = await UserRepository.getUserByCredentials(authRequest)
+): Promise<void> {
+  const user = await UserRepository.getUserByUsername(authRequest.username)
 
   if (user != null) {
     if (
@@ -16,12 +16,16 @@ async function auth(
       (await compare(authRequest.password, user.password))
     ) {
       sign(authRequest, process.env.AUTH_SECRET ?? '', (err, token) => {
-        if (err != null && token != null) success(token)
-        else throw new GenericError('Signing error')
+        if (err === null && token != null) {
+          success(token)
+        } else {
+          throw new GenericError('Signing error')
+        }
       })
     } else {
       throw new GenericError('Password mismatch')
     }
+    return
   }
   throw new GenericError('No user')
 }

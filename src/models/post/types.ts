@@ -5,7 +5,6 @@ export interface IPostModel {
   title: string
   text: string
   author: IUser 
-  timestamp: Date
   published: Date
   updated: Date | null
   isPublished: boolean
@@ -15,7 +14,6 @@ export interface IPostCreateModel {
   title: string
   text: string
   author: Types.ObjectId
-  timestamp: Date
   published: Date
 }
 

@@ -19,8 +19,7 @@ async function createPost(
     title: postRequest.title,
     text: postRequest.text,
     author: new Types.ObjectId(postRequest.author),
-    published: new Date(postRequest.published),
-    timestamp: new Date()
+    published: new Date(postRequest.published)
   }
 
   const [postData, user] = await Promise.all([
@@ -29,10 +28,11 @@ async function createPost(
   ])
 
   return {
-    ...postData,
-    updated: postData.updated != null ? format(postData.updated, 'ds') : null,
-    published: format(postData.published, ''),
-    author: user.toObject()
+    ...(await postData.toJSON()),
+    updated:
+      postData.updated != null ? format(postData.updated, 'MM/dd/yyyy') : null,
+    published: format(postData.published, 'MM/dd/yyyy'),
+    author: user.toObject(),
   }
 }
 
@@ -43,7 +43,6 @@ async function updatePost(
   const post: IPostUpdateModel = {
     ...updatePostRequest,
     author: new Types.ObjectId(updatePostRequest.author),
-    timestamp: new Date(updatePostRequest.timestamp),
     updated: new Date(),
     published: new Date(updatePostRequest.published)
   }

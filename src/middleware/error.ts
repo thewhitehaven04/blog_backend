@@ -15,6 +15,7 @@ const genericErrorHandler = (
       data: []
     })
   }
+  next(err)
 }
 
 export { genericErrorHandler }

@@ -9,8 +9,10 @@ config()
 connectToDatabase(process.env.CONNECTION_STRING)
 
 const app = express()
-setupRouting(app, routerMap)
 app.use(cors())
+app.use(express.json())
+
+setupRouting(app, routerMap)
 app.use(genericErrorHandler)
 
 app.listen(process.env.PORT)
