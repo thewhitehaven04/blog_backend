@@ -1,9 +1,24 @@
-import { type ObjectId } from 'mongoose'
+import { type Types } from 'mongoose'
+import { type IUser } from '../user/types'
 
-export interface IPost {
+export interface IPostModel {
   title: string
   text: string
-  author: ObjectId
+  author: IUser 
   timestamp: Date
-  publishDate: Date,
+  published: Date
+  updated: Date | null
+  isPublished: boolean
+}
+
+export interface IPostCreateModel {
+  title: string
+  text: string
+  author: Types.ObjectId
+  timestamp: Date
+  published: Date
+}
+
+export interface IPostUpdateModel extends IPostCreateModel {
+  updated: Date
 }

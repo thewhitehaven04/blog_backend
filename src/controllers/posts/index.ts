@@ -1,25 +1,39 @@
 import { type Response, type Request } from 'express'
 import expressAsyncHandler from 'express-async-handler'
 import {
-  type ICreatePostResponseDto,
-  type ICreatePostRequestDto
+  type TPostUpdateResponseDto,
+  type ICreatePostRequestDto,
+  type IUpdatePostRequestDto,
+  type TPostCreateResponseDto
 } from './types'
 import * as PostService from '../../services/posts'
 
 const createPost = expressAsyncHandler(
   async (
     req: Request<any, any, ICreatePostRequestDto, any>,
-    res: Response<ICreatePostResponseDto>
+    res: Response<TPostCreateResponseDto>
   ) => {
     const post = await PostService.createPost(req.body)
     res.json({
       success: true,
-      data: {
-        id: post.id
-      },
+      data: [post],
       errors: []
     })
   }
 )
 
-export { createPost }
+const updatePost = expressAsyncHandler(
+  async (
+    req: Request<{ id: string }, any, IUpdatePostRequestDto, any>,
+    res: Response<TPostUpdateResponseDto>
+  ) => {
+    await PostService.updatePost(req.params.id, req.body)
+    res.json({
+      success: true,
+      data: [],
+      errors: []
+    })
+  }
+)
+
+export { createPost, updatePost }

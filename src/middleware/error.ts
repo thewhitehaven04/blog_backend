@@ -5,13 +5,14 @@ import { type Response } from 'express'
 const genericErrorHandler = (
   err: any,
   req: any,
-  res: Response<IGenericResponse>,
-  next: any,
+  res: Response<IGenericResponse<any>>,
+  next: any
 ): void => {
   if (err instanceof GenericError) {
     res.json({
       success: false,
-      errors: [err.serialize()]
+      errors: [err.serialize()],
+      data: []
     })
   }
 }

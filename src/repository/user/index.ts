@@ -1,6 +1,6 @@
 import { GenericError } from '../../appError'
 import UserModel from '../../models/user'
-import { type TUserDocument } from './types'
+import { type IUserCredentials, type TUserDocument } from './types'
 
 async function getUser(id: string): Promise<TUserDocument> {
   const user = await UserModel.findById(id).exec()
@@ -11,4 +11,10 @@ async function getUser(id: string): Promise<TUserDocument> {
   )
 }
 
-export { getUser }
+async function getUserByCredentials(
+  credentials: IUserCredentials
+): Promise<TUserDocument | null> {
+  return (await UserModel.findOne(credentials).exec())
+}
+
+export { getUser, getUserByCredentials }

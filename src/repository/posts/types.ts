@@ -1,7 +1,11 @@
 import { type Types, type Document } from 'mongoose'
-import { type IPost } from '../../models/post/types'
+import { type IPostModel } from '../../models/post/types'
 
-export type TPostDocument = Promise<
-  Document<unknown, Record<string, unknown>, IPost> &
-    IPost & { _id: Types.ObjectId }
->
+export type TPostDocument = Document<
+  unknown,
+  Record<string, unknown>,
+  IPostModel
+> &
+  IPostModel & {
+    _id: Types.ObjectId
+  }

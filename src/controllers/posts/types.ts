@@ -1,3 +1,4 @@
+import { type IFormattedPostDto } from '../../services/posts/types'
 import { type IGenericResponse } from '../types'
 
 export interface ICreatePostRequestDto {
@@ -5,11 +6,13 @@ export interface ICreatePostRequestDto {
   text: string
   author: string
   timestamp: string
-  publishDate: string
+  published: string
 }
 
-export interface ICreatePostResponseDto extends IGenericResponse {
-  data: {
-    id: string
-  }
+export interface IUpdatePostRequestDto extends ICreatePostRequestDto {
+  updated: string
 }
+
+export type TPostCreateResponseDto = IGenericResponse<IFormattedPostDto>
+
+export type TPostUpdateResponseDto = IGenericResponse<IFormattedPostDto>
