@@ -1,7 +1,7 @@
-export interface IUser {
+export interface IUserModel {
   username: string
   password: string
   email: string
 }
 
-export interface ISecureUser extends Omit<IUser, 'password'> {}
+export interface ISecureUser extends Omit<IUserModel, 'password'> {}

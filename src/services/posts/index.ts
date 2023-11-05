@@ -5,13 +5,14 @@ import {
 } from '../../controllers/posts/types'
 import {
   type IPostUpdateModel,
-  type IPostCreateModel
+  type IPostCreateModel,
+  type IPostModel
 } from '../../models/post/types'
 import * as PostRepository from './../../repository/posts'
 import * as UserRepository from './../../repository/user'
 import { type IFormattedPostDto } from './types'
 import format from 'date-fns/format'
-import PostModel from '../../models/post'
+import { GenericError } from '../../appError'
 
 async function createPost(
   postRequest: ICreatePostRequestDto
@@ -33,7 +34,7 @@ async function createPost(
     updated:
       postData.updated != null ? format(postData.updated, 'MM/dd/yyyy') : null,
     published: format(postData.published, 'MM/dd/yyyy'),
-    author: user.toObject(),
+    author: user.toObject()
   }
 }
 
@@ -51,4 +52,17 @@ async function updatePost(
   await PostRepository.updatePost(postId, post)
 }
 
-export { createPost, updatePost }
+async function getPost(
+  postId: string
+): Promise<
+  IPostModel & { _id: Types.ObjectId } & Required<{ _id: Types.ObjectId }>
+> {
+  const post = (await PostRepository.getPost(postId))?.toObject()
+  if (post != null) {
+    return post
+  }
+
+  throw new GenericError(`There is no post with id '${postId}'`)
+}
+
+export { createPost, updatePost, getPost }

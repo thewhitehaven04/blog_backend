@@ -1,10 +1,10 @@
 import { type Types } from 'mongoose'
-import { type IUser } from '../user/types'
+import { type IUserModel } from '../user/types'
 
 export interface IPostModel {
   title: string
   text: string
-  author: IUser 
+  author: IUserModel 
   published: Date
   updated: Date | null
   isPublished: boolean

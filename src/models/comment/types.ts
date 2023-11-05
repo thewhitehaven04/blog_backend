@@ -1,8 +1,8 @@
-import { type ObjectId } from 'mongoose'
+import { type Types } from 'mongoose'
 
 export interface ICommentModel {
   text: string
   created: Date
-  author: string 
-  post: ObjectId
+  author: Types.ObjectId 
+  post: Types.ObjectId 
 }

@@ -1,7 +1,7 @@
 import { type NextFunction, type Request, type Response } from 'express'
 import { type IncomingHttpHeaders } from 'http'
 import { GenericError } from '../appError'
-import { type VerifyErrors, verify } from 'jsonwebtoken'
+import { verify } from 'jsonwebtoken'
 import { type IGenericResponse } from '../controllers/types'
 
 function parseAuthHeaderForBearerToken(headers: IncomingHttpHeaders): string {
@@ -12,14 +12,14 @@ function parseAuthHeaderForBearerToken(headers: IncomingHttpHeaders): string {
   throw new GenericError('Authorization header is in invalid format')
 }
 
-export function verifyToken(
+export function verifyTokenAndAttachAsContext(
   req: Request,
   res: Response<IGenericResponse<null>>,
   next: NextFunction
 ): void {
   const token = parseAuthHeaderForBearerToken(req.headers)
 
-  verify(token, process.env.AUTH_SECRET ?? '', (error: VerifyErrors | null) => {
+  verify(token, process.env.AUTH_SECRET ?? '', (error, token) => {
     if (error != null) {
       res.status(401).json({
         success: false,
@@ -27,6 +27,7 @@ export function verifyToken(
         data: null
       })
     } else {
+      // attach token data to context
       next()
     }
   })
