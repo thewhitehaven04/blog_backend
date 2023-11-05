@@ -11,6 +11,7 @@ import * as PostRepository from './../../repository/posts'
 import * as UserRepository from './../../repository/user'
 import { type IFormattedPostDto } from './types'
 import format from 'date-fns/format'
+import PostModel from '../../models/post'
 
 async function createPost(
   postRequest: ICreatePostRequestDto

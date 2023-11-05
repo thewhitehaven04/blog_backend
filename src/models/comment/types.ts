@@ -1,8 +1,8 @@
 import { type ObjectId } from 'mongoose'
 
-export interface IComment {
+export interface ICommentModel {
   text: string
-  timestamp: Date
-  author: ObjectId
+  created: Date
+  author: string 
   post: ObjectId
 }

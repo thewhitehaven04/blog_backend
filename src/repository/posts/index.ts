@@ -8,7 +8,7 @@ import { type TPostDocument } from './types'
 async function savePost(post: IPostCreateModel): Promise<TPostDocument> {
   return await PostModel.create({
     ...post,
-    updated: new Date(), 
+    updated: new Date()
   })
 }
 
@@ -19,4 +19,8 @@ async function updatePost(
   await PostModel.findByIdAndUpdate(postId, post).exec()
 }
 
-export { savePost, updatePost }
+async function getPost(postId: string): Promise<TPostDocument | null> {
+  return await PostModel.findById(postId).exec()
+}
+
+export { savePost, updatePost, getPost }

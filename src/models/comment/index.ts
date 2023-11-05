@@ -1,10 +1,10 @@
 import { Schema, Types, model } from 'mongoose'
-import { type IComment } from './types'
+import { type ICommentModel } from './types'
 
-const CommentSchema = new Schema<IComment>({
+const CommentSchema = new Schema<ICommentModel>({
   text: {type: String, required: true }, 
-  timestamp: {type: Date, required: true },
-  author: { type: Types.ObjectId, ref: 'user', required: true },
+  created: {type: Date, required: true },
+  author: String,
   post: { type: Types.ObjectId, ref: 'post', required: true }
 })
 
