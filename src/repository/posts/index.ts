@@ -8,7 +8,6 @@ import { type TPostDocument } from './types'
 async function savePost(post: IPostCreateModel): Promise<TPostDocument> {
   return await PostModel.create({
     ...post,
-    timestamp: new Date(),
     updated: new Date(), 
   })
 }

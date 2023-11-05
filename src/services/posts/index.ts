@@ -24,7 +24,7 @@ async function createPost(
 
   const [postData, user] = await Promise.all([
     PostRepository.savePost(post),
-    UserRepository.getUser(postRequest.author)
+    UserRepository.getUserWithoutCredentials(postRequest.author)
   ])
 
   return {

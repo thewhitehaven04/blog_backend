@@ -5,8 +5,8 @@ import { type VerifyErrors, verify } from 'jsonwebtoken'
 import { type IGenericResponse } from '../controllers/types'
 
 function parseAuthHeaderForBearerToken(headers: IncomingHttpHeaders): string {
-  const regexp = /Bearer: (.+)/
-  const match = headers.authorization?.match(regexp)?.[0]
+  const regexp = /Bearer (.+)/
+  const match = headers.authorization?.match(regexp)?.[1]
   if (match != null) return match
 
   throw new GenericError('Authorization header is in invalid format')
