@@ -23,13 +23,8 @@ async function getUser(id: string): Promise<TUserDocument> {
 
 async function getUserWithoutCredentials(
   id: string
-): Promise<TSecureUserDocument> {
-  const user = await UserModel.findById(id, 'username email').exec()
-  if (user != null) return user
-
-  throw new GenericError(
-    `Database error: User ${id} has not been found in the database`
-  )
+): Promise<TSecureUserDocument | null> {
+  return await UserModel.findById(id, 'username email').exec()
 }
 
 async function getUserByUsername(

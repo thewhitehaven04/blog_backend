@@ -13,7 +13,7 @@ import * as UserRepository from './../../repository/user'
 import { type IFormattedPostDto } from './types'
 import format from 'date-fns/format'
 import { GenericError } from '../../appError'
-import { type TPostDocument } from '../../repository/posts/types'
+import { type IUserContext } from '../../typings/request'
 
 async function createPost(
   postRequest: ICreatePostRequestDto
@@ -30,13 +30,18 @@ async function createPost(
     UserRepository.getUserWithoutCredentials(postRequest.author)
   ])
 
-  return {
-    ...(await postData.toJSON()),
-    updated:
-      postData.updated != null ? format(postData.updated, 'MM/dd/yyyy') : null,
-    published: format(postData.published, 'MM/dd/yyyy'),
-    author: user.username
+  if (user != null) {
+    return {
+      ...(await postData.toJSON()),
+      updated:
+        postData.updated != null
+          ? format(postData.updated, 'MM/dd/yyyy')
+          : null,
+      published: format(postData.published, 'MM/dd/yyyy'),
+      author: user.username
+    }
   }
+  throw new GenericError(`No user ${postRequest.author} found`)
 }
 
 async function updatePost(
@@ -83,4 +88,20 @@ async function getPosts(
   return await Promise.all(transformed)
 }
 
-export { createPost, updatePost, getPost, getPosts }
+async function deletePost(
+  postId: string,
+  userContext: IUserContext
+): Promise<void> {
+  const { userId } = userContext
+  if (userId != null) {
+    const user = await UserRepository.getUserWithoutCredentials(userId)
+
+    if (user != null) {
+      await PostRepository.deletePost(postId)
+      return
+    }
+  }
+  throw new GenericError("Only post's author can delete this post")
+}
+
+export { createPost, updatePost, getPost, getPosts, deletePost }

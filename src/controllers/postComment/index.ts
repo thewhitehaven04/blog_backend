@@ -7,9 +7,13 @@ import {
 import * as CommentService from './../../services/comment'
 import { type TGenericResponse } from '../types'
 import { verifyTokenAndAttachAsContext } from '../../middleware/verifyToken'
+import { checkSchema } from 'express-validator'
+import { createPostRequestSchema, updatePostRequestSchema } from '../posts/validator'
+import { validateRequestBody } from '../../middleware/validation'
 
 const postCommentPost = [
   verifyTokenAndAttachAsContext,
+  validateRequestBody(createPostRequestSchema),
   expressAsyncHandler(
     async (
       req: Request<{ postId: string }, any, IPostCommentRequestDto, any>,
@@ -22,7 +26,7 @@ const postCommentPost = [
       )
       res.json({
         success: true,
-        data: [{ id: commentId }]
+        data: { id: commentId }
       })
     }
   )
@@ -30,6 +34,7 @@ const postCommentPost = [
 
 const updateCommentPost = [
   verifyTokenAndAttachAsContext,
+  validateRequestBody(createPostRequestSchema),
   expressAsyncHandler(
     async (
       req: Request<{ commentId: string }, any, any>,
