@@ -1,12 +1,10 @@
-import { type IApplicationError } from './typings/error'
+import { type TApplicationErrorDto } from './typings/error'
 
 export class GenericError extends Error {
-  serialize(): IApplicationError {
+  serialize(): TApplicationErrorDto {
     return {
-      data: {
-        message: this.message,
-        cause: this.cause
-      }
+      message: this.message,
+      cause: this.cause
     }
   }
 }

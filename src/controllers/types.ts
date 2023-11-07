@@ -1,7 +1,12 @@
-import { type IApplicationError } from '../typings/error'
+import { type TApplicationErrorDto } from '../typings/error'
 
-export interface IGenericResponse<T> {
-  success: boolean
-  errors: IApplicationError[] | null 
-  data?: T[] | T
+interface IErrorResponse {
+  success: false
+  errors: TApplicationErrorDto
 }
+
+interface ISuccessfulResponse<T> {
+  success: true
+  data?: T[]
+}
+export type TGenericResponse<T> = ISuccessfulResponse<T> | IErrorResponse

@@ -8,17 +8,20 @@ import { GenericError } from '../../appError'
 async function addCommentToPost(
   postId: string,
   comment: IPostCommentRequestDto,
-  userContext: IUserContext,
+  userContext: IUserContext
 ): Promise<string> {
   const post = await PostService.getPost(postId)
 
-  const { _id } = await CommentRepository.saveComment({
-    ...comment,
-    author: new Types.ObjectId(userContext.userId),
-    post: new Types.ObjectId(post._id),
-    created: new Date()
-  })
-  return _id.toString()
+  if (userContext.userId != null) {
+    const { _id } = await CommentRepository.saveComment({
+      ...comment,
+      author: new Types.ObjectId(userContext.userId),
+      post: new Types.ObjectId(post._id),
+      created: new Date()
+    })
+    return _id.toString()
+  }
+  throw new GenericError('Invalid user')
 }
 
 async function updatePostComment(
@@ -29,18 +32,23 @@ async function updatePostComment(
   const postComment = await CommentRepository.getComment(commentId)
   if (postComment?.author.id.toString() === userContext.userId) {
     await CommentRepository.updateComment(commentId, text)
+    return
   }
 
   throw new GenericError('Cannot update comment made by another user')
 }
 
-async function deletePostComment(commentId: string, userContext: IUserContext): Promise<void> {
+async function deletePostComment(
+  commentId: string,
+  userContext: IUserContext
+): Promise<void> {
   const postComment = await CommentRepository.getComment(commentId)
   if (postComment?.author.id.toString() === userContext.userId) {
     await CommentRepository.deleteComment(commentId)
+    return
   }
 
-  await CommentRepository.deleteComment(commentId)
+  throw new GenericError('Cannot remove comment made by another user')
 }
 
 export { addCommentToPost, updatePostComment, deletePostComment }

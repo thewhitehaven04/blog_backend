@@ -1,5 +1,5 @@
 import { type IFormattedPostDto } from '../../services/posts/types'
-import { type IGenericResponse } from '../types'
+import { type TGenericResponse } from '../types'
 
 export interface ICreatePostRequestDto {
   title: string
@@ -9,9 +9,18 @@ export interface ICreatePostRequestDto {
 }
 
 export interface IUpdatePostRequestDto extends ICreatePostRequestDto {
+  text: string
+  title: string
   updated: string
 }
 
-export type TPostCreateResponseDto = IGenericResponse<IFormattedPostDto>
+export interface IGetPostsRequestParamsDto {
+  offset: number
+  count: number
+}
 
-export type TPostUpdateResponseDto = IGenericResponse<IFormattedPostDto>
+export type TPostsCollectionResponseDto = TGenericResponse<IFormattedPostDto[]>
+
+export type TPostCreateResponseDto = TGenericResponse<IFormattedPostDto>
+
+export type TPostUpdateResponseDto = TGenericResponse<IFormattedPostDto>

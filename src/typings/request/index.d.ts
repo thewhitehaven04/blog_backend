@@ -5,7 +5,7 @@ export interface IUserContext {
 declare global {
   namespace Express {
     interface Request {
-      context: IUserContext;
+      context: IUserContext
     }
   }
 }

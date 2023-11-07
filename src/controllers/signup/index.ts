@@ -2,12 +2,12 @@ import expressAsyncHandler from 'express-async-handler'
 import { type Request, type Response } from 'express'
 import { type ISignUpRequestDto } from './types'
 import * as SignupService from './../../services/signup'
-import { type IGenericResponse } from '../types'
+import { type TGenericResponse<T> } from '../types'
 
 const postSignUp = expressAsyncHandler(
   async (
     req: Request<any, any, ISignUpRequestDto>,
-    res: Response<IGenericResponse<null>>
+    res: Response<TGenericResponse<T><null>>
   ) => {
     await SignupService.signUp(req.body)
     res.send({

@@ -1,6 +1,6 @@
-import { type IGenericResponse } from '../types'
+import { type TGenericResponse } from '../types'
 
-export type TPostCommentResponseDto = IGenericResponse<{ id: string }>
+export type TPostCommentResponseDto = TGenericResponse<{ id: string }>
 
 export interface IPostCommentRequestDto {
   text: string

@@ -13,6 +13,7 @@ import * as UserRepository from './../../repository/user'
 import { type IFormattedPostDto } from './types'
 import format from 'date-fns/format'
 import { GenericError } from '../../appError'
+import { type TPostDocument } from '../../repository/posts/types'
 
 async function createPost(
   postRequest: ICreatePostRequestDto
@@ -34,7 +35,7 @@ async function createPost(
     updated:
       postData.updated != null ? format(postData.updated, 'MM/dd/yyyy') : null,
     published: format(postData.published, 'MM/dd/yyyy'),
-    author: user.toObject()
+    author: user.username
   }
 }
 
@@ -65,4 +66,21 @@ async function getPost(
   throw new GenericError(`There is no post with id '${postId}'`)
 }
 
-export { createPost, updatePost, getPost }
+async function getPosts(
+  offset: number,
+  count: number
+): Promise<IFormattedPostDto[]> {
+  const posts = await PostRepository.getPosts(count, offset)
+
+  const transformed = posts.map(async (post) => {
+    return {
+      ...post.toJSON(),
+      updated: post.updated != null ? format(post.updated, 'MM/dd/yyyy') : null,
+      published: format(post.published, 'MM/dd/yyyy'),
+      author: post.author.username
+    }
+  })
+  return await Promise.all(transformed)
+}
+
+export { createPost, updatePost, getPost, getPosts }

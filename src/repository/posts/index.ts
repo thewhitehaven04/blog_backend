@@ -23,4 +23,15 @@ async function getPost(postId: string): Promise<TPostDocument | null> {
   return await PostModel.findById(postId).exec()
 }
 
-export { savePost, updatePost, getPost }
+async function getPosts(
+  count: number,
+  offset: number
+): Promise<TPostDocument[]> {
+  return await PostModel.find()
+    .sort({ published: 'desc' })
+    .limit(count)
+    .skip(offset)
+    .exec()
+}
+
+export { savePost, updatePost, getPost, getPosts }

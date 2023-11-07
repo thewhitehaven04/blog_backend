@@ -2,7 +2,7 @@ import { type NextFunction, type Request, type Response } from 'express'
 import { type IncomingHttpHeaders } from 'http'
 import { GenericError } from '../appError'
 import { verify } from 'jsonwebtoken'
-import { type IGenericResponse } from '../controllers/types'
+import { type TGenericResponse } from '../controllers/types'
 
 function parseAuthHeaderForBearerToken(headers: IncomingHttpHeaders): string {
   const regexp = /Bearer (.+)/
@@ -14,7 +14,7 @@ function parseAuthHeaderForBearerToken(headers: IncomingHttpHeaders): string {
 
 export function verifyTokenAndAttachAsContext(
   req: Request,
-  res: Response<IGenericResponse<null>>,
+  res: Response<TGenericResponse<null>>,
   next: NextFunction
 ): void {
   const token = parseAuthHeaderForBearerToken(req.headers)
@@ -23,11 +23,9 @@ export function verifyTokenAndAttachAsContext(
     if (error != null) {
       res.status(401).json({
         success: false,
-        errors: [],
-        data: null
+        errors: []
       })
     } else {
-      // attach token data to context
       next()
     }
   })

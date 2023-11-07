@@ -4,43 +4,65 @@ import {
   type TPostUpdateResponseDto,
   type ICreatePostRequestDto,
   type IUpdatePostRequestDto,
-  type TPostCreateResponseDto
+  type TPostCreateResponseDto,
+  type TPostsCollectionResponseDto,
+  type IGetPostsRequestParamsDto
 } from './types'
 import * as PostService from '../../services/posts'
-import { verifyToken } from '../../middleware/verifyToken'
+import { verifyTokenAndAttachAsContext } from '../../middleware/verifyToken'
+import { checkSchema } from 'express-validator'
+import { createPostRequestSchema } from './validator'
 
 const createPost = [
-  verifyToken,
+  verifyTokenAndAttachAsContext,
+  checkSchema(createPostRequestSchema),
   expressAsyncHandler(
     async (
-      req: Request<any, any, ICreatePostRequestDto, any>,
+      req: Request<any, any, ICreatePostRequestDto>,
       res: Response<TPostCreateResponseDto>
     ) => {
       const post = await PostService.createPost(req.body)
       res.json({
         success: true,
         data: [post],
-        errors: []
       })
     }
   )
 ]
 
 const updatePost = [
-  verifyToken,
+  verifyTokenAndAttachAsContext,
   expressAsyncHandler(
     async (
-      req: Request<{ id: string }, any, IUpdatePostRequestDto, any>,
+      req: Request<{ id: string }, any, IUpdatePostRequestDto>,
       res: Response<TPostUpdateResponseDto>
     ) => {
       await PostService.updatePost(req.params.id, req.body)
       res.json({
         success: true,
         data: [],
+      })
+    }
+  )
+]
+
+const getPosts = [
+  expressAsyncHandler(
+    async (
+      req: Request<IGetPostsRequestParamsDto>,
+      res: Response<TPostsCollectionResponseDto>
+    ) => {
+      const posts = await PostService.getPosts(
+        req.params.offset,
+        req.params.count
+      )
+      res.json({
+        success: true,
+        data: posts,
         errors: []
       })
     }
   )
 ]
 
-export { createPost, updatePost }
+export { createPost, updatePost, getPosts }

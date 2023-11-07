@@ -1,3 +1,1 @@
-export interface IApplicationError {
-  data: Record<string, unknown>
-}
+export type TApplicationErrorDto = Record<string, any>

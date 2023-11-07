@@ -5,7 +5,7 @@ import {
   type TPostCommentResponseDto
 } from './types'
 import * as CommentService from './../../services/comment'
-import { type IGenericResponse } from '../types'
+import { type TGenericResponse } from '../types'
 import { verifyTokenAndAttachAsContext } from '../../middleware/verifyToken'
 
 const postCommentPost = [
@@ -22,8 +22,7 @@ const postCommentPost = [
       )
       res.json({
         success: true,
-        data: { id: commentId },
-        errors: []
+        data: [{ id: commentId }]
       })
     }
   )
@@ -34,7 +33,7 @@ const updateCommentPost = [
   expressAsyncHandler(
     async (
       req: Request<{ commentId: string }, any, any>,
-      res: Response<IGenericResponse<null>>
+      res: Response<TGenericResponse<null>>
     ) => {
       await CommentService.updatePostComment(
         req.params.commentId,
@@ -42,8 +41,7 @@ const updateCommentPost = [
         req.context
       )
       res.json({
-        success: true,
-        errors: []
+        success: true
       })
     }
   )
@@ -54,11 +52,14 @@ const deleteCommentPost = [
   expressAsyncHandler(
     async (
       req: Request<{ commentId: string }, any, any, any>,
-      res: Response<IGenericResponse<null>>
+      res: Response<TGenericResponse<null>>
     ) => {
       await CommentService.deletePostComment(req.params.commentId, req.context)
+      res.json({
+        success: true
+      })
     }
   )
 ]
 
-export { postCommentPost, updateCommentPost }
+export { postCommentPost, updateCommentPost, deleteCommentPost }
