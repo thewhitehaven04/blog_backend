@@ -12,10 +12,10 @@ async function addCommentToPost(
 ): Promise<string> {
   const post = await PostService.getPost(postId)
 
-  if (userContext.userId != null) {
+  if (userContext.id != null) {
     const { _id } = await CommentRepository.saveComment({
       ...comment,
-      author: new Types.ObjectId(userContext.userId),
+      author: new Types.ObjectId(userContext.id),
       post: new Types.ObjectId(post._id),
       created: new Date()
     })
@@ -30,7 +30,7 @@ async function updatePostComment(
   userContext: IUserContext
 ): Promise<void> {
   const postComment = await CommentRepository.getComment(commentId)
-  if (postComment?.author.id.toString() === userContext.userId) {
+  if (postComment?.author.id.toString() === userContext.id) {
     await CommentRepository.updateComment(commentId, text)
     return
   }
@@ -43,7 +43,7 @@ async function deletePostComment(
   userContext: IUserContext
 ): Promise<void> {
   const postComment = await CommentRepository.getComment(commentId)
-  if (postComment?.author.id.toString() === userContext.userId) {
+  if (postComment?.author.id.toString() === userContext.id) {
     await CommentRepository.deleteComment(commentId)
     return
   }

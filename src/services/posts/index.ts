@@ -11,9 +11,9 @@ import {
 import * as PostRepository from './../../repository/posts'
 import * as UserRepository from './../../repository/user'
 import { type IFormattedPostDto } from './types'
-import format from 'date-fns/format'
 import { GenericError } from '../../appError'
 import { type IUserContext } from '../../typings/request'
+import formatISO from 'date-fns/formatISO'
 
 async function createPost(
   postRequest: ICreatePostRequestDto
@@ -33,11 +33,8 @@ async function createPost(
   if (user != null) {
     return {
       ...(await postData.toJSON()),
-      updated:
-        postData.updated != null
-          ? format(postData.updated, 'MM/dd/yyyy')
-          : null,
-      published: format(postData.published, 'MM/dd/yyyy'),
+      updated: postData.updated != null ? formatISO(postData.updated) : null,
+      published: formatISO(postData.published),
       author: user.username
     }
   }
@@ -80,8 +77,8 @@ async function getPosts(
   const transformed = posts.map(async (post) => {
     return {
       ...post.toJSON(),
-      updated: post.updated != null ? format(post.updated, 'MM/dd/yyyy') : null,
-      published: format(post.published, 'MM/dd/yyyy'),
+      updated: post.updated != null ? formatISO(post.updated) : null,
+      published: formatISO(post.published),
       author: post.author.username
     }
   })
@@ -92,9 +89,9 @@ async function deletePost(
   postId: string,
   userContext: IUserContext
 ): Promise<void> {
-  const { userId } = userContext
-  if (userId != null) {
-    const user = await UserRepository.getUserWithoutCredentials(userId)
+  const { id } = userContext
+  if (id != null) {
+    const user = await UserRepository.getUserWithoutCredentials(id)
 
     if (user != null) {
       await PostRepository.deletePost(postId)

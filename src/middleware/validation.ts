@@ -1,5 +1,5 @@
 import { type NextFunction, type Request, type Response } from 'express'
-import { validationResult, type Schema } from 'express-validator'
+import { validationResult, type Schema, checkSchema } from 'express-validator'
 import { type TGenericResponse } from '../controllers/types'
 
 export function validateRequestBody<T>(requestBodySchema: Schema) {
@@ -8,6 +8,7 @@ export function validateRequestBody<T>(requestBodySchema: Schema) {
     res: Response<TGenericResponse<T>>,
     next: NextFunction
   ) => {
+    checkSchema(requestBodySchema)
     const errors = validationResult(req.body)
 
     if (!errors.isEmpty()) {

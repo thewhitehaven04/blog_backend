@@ -1,9 +1,7 @@
 import { GenericError } from '../../appError'
-import { type ISignUpRequestDto } from '../../controllers/signup/types'
 import UserModel from '../../models/user'
 import { type IUserModel } from '../../models/user/types'
 import {
-  type IUserCredentials,
   type TSecureUserDocument,
   type TUserDocument
 } from './types'

@@ -1,6 +1,8 @@
 export interface IUserContext {
-  userId: string | null
-}  
+  id: string
+  username: string
+  email: string
+}
 
 declare global {
   namespace Express {

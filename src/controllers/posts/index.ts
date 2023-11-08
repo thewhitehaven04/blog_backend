@@ -10,13 +10,13 @@ import {
 } from './types'
 import * as PostService from '../../services/posts'
 import { verifyTokenAndAttachAsContext } from '../../middleware/verifyToken'
-import { checkSchema } from 'express-validator'
-import { createPostRequestSchema } from './validator'
+import { createPostRequestSchema, updatePostRequestSchema } from './validator'
 import { type TGenericResponse } from '../types'
+import { validateRequestBody } from '../../middleware/validation'
 
 const createPost = [
   verifyTokenAndAttachAsContext,
-  checkSchema(createPostRequestSchema),
+  validateRequestBody(createPostRequestSchema),
   expressAsyncHandler(
     async (
       req: Request<any, any, ICreatePostRequestDto>,
@@ -33,6 +33,7 @@ const createPost = [
 
 const updatePost = [
   verifyTokenAndAttachAsContext,
+  validateRequestBody(updatePostRequestSchema),
   expressAsyncHandler(
     async (
       req: Request<{ id: string }, any, IUpdatePostRequestDto>,
@@ -65,6 +66,7 @@ const getPosts = [
 ]
 
 const deletePosts = [
+  verifyTokenAndAttachAsContext,
   expressAsyncHandler(
     async (
       req: Request<{ id: string }>,
