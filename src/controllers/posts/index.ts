@@ -12,11 +12,12 @@ import * as PostService from '../../services/posts'
 import { verifyTokenAndAttachAsContext } from '../../middleware/verifyToken'
 import { createPostRequestSchema, updatePostRequestSchema } from './validator'
 import { type TGenericResponse } from '../types'
-import { validateRequestBody } from '../../middleware/validation'
+import { validateRequest } from '../../middleware/validation'
+import { checkSchema } from 'express-validator'
 
 const createPost = [
   verifyTokenAndAttachAsContext,
-  validateRequestBody(createPostRequestSchema),
+  validateRequest(checkSchema(createPostRequestSchema)),
   expressAsyncHandler(
     async (
       req: Request<any, any, ICreatePostRequestDto>,
@@ -33,7 +34,7 @@ const createPost = [
 
 const updatePost = [
   verifyTokenAndAttachAsContext,
-  validateRequestBody(updatePostRequestSchema),
+  validateRequest(checkSchema(updatePostRequestSchema)),
   expressAsyncHandler(
     async (
       req: Request<{ id: string }, any, IUpdatePostRequestDto>,
