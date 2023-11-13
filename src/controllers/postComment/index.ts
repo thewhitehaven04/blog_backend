@@ -38,7 +38,7 @@ const updateCommentPost = [
   expressAsyncHandler(
     async (
       req: Request<{ commentId: string }, any, any>,
-      res: Response<TGenericResponse<null>>
+      res: Response<TGenericResponse>
     ) => {
       await CommentService.updatePostComment(
         req.params.commentId,
@@ -46,7 +46,8 @@ const updateCommentPost = [
         req.context
       )
       res.json({
-        success: true
+        success: true,
+        data: null
       })
     }
   )
@@ -57,11 +58,12 @@ const deleteCommentPost = [
   expressAsyncHandler(
     async (
       req: Request<{ commentId: string }, any, any, any>,
-      res: Response<TGenericResponse<null>>
+      res: Response<TGenericResponse>
     ) => {
       await CommentService.deletePostComment(req.params.commentId, req.context)
       res.json({
-        success: true
+        success: true,
+        data: null
       })
     }
   )

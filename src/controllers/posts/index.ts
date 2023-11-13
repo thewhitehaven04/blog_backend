@@ -42,7 +42,8 @@ const updatePost = [
     ) => {
       await PostService.updatePost(req.params.id, req.body)
       res.json({
-        success: true
+        success: true,
+        data: null
       })
     }
   )
@@ -69,13 +70,9 @@ const getPosts = [
 const deletePosts = [
   verifyTokenAndAttachAsContext,
   expressAsyncHandler(
-    async (
-      req: Request<{ id: string }>,
-      res: Response<TGenericResponse<null>>
-    ) => {
+    async (req: Request<{ id: string }>, res: Response<TGenericResponse>) => {
       await PostService.deletePost(req.params.id, req.context)
-
-      res.json({ success: true })
+      res.json({ success: true, data: null })
     }
   )
 ]
