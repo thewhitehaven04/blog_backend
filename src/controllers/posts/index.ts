@@ -6,7 +6,8 @@ import {
   type IUpdatePostRequestDto,
   type TPostCreateResponseDto,
   type TPostsCollectionResponseDto,
-  type IGetPostsRequestParamsDto
+  type IGetPostsRequestParamsDto,
+  type TPostResponseDto
 } from './types'
 import * as PostService from '../../services/posts'
 import { verifyTokenAndAttachAsContext } from '../../middleware/verifyToken'
@@ -77,4 +78,11 @@ const deletePosts = [
   )
 ]
 
-export { createPost, updatePost, getPosts, deletePosts }
+const getPost = expressAsyncHandler(
+  async (req: Request<{id: string}>, res: Response<TPostResponseDto>) => {
+    const post = await PostService.getFormattedPost(req.params.id)
+    res.json({success: true, data: post})
+  }
+)
+
+export { createPost, updatePost, getPosts, deletePosts, getPost }

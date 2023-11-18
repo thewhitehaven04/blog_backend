@@ -22,3 +22,5 @@ export type TPostsCollectionResponseDto = TGenericResponse<IFormattedPostDto[]>
 export type TPostCreateResponseDto = TGenericResponse<IFormattedPostDto>
 
 export type TPostUpdateResponseDto = TGenericResponse
+
+export type TPostResponseDto = TGenericResponse<IFormattedPostDto>

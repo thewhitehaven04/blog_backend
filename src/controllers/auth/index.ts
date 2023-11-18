@@ -1,6 +1,6 @@
 import expressAsyncHandler from 'express-async-handler'
 import { type Response, type Request } from 'express'
-import { type TAuthResponseDto, type IAuthRequestDto } from './types'
+import { type TAuthResponseDto, type IAuthRequestDto, type IRefreshTokenRequestDto } from './types'
 import { auth } from '../../services/auth'
 
 const getToken = expressAsyncHandler(
@@ -11,6 +11,15 @@ const getToken = expressAsyncHandler(
     await auth(req.body, (token) => {
       res.status(200).json({ success: true, data: { token } })
     })
+  }
+)
+
+const getRefreshToken = expressAsyncHandler(
+  async (
+    req: Request<any, any, IRefreshTokenRequestDto>,
+    res: Response<TAuthResponseDto> 
+  ) => {
+
   }
 )
 

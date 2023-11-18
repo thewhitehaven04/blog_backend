@@ -21,14 +21,19 @@ async function auth(
         id: user.id,
         email: user.email
       }
-
-      sign(jwtPayload, APP_CONFIG.authSecret, (err, token) => {
-        if (err === null && token != null) {
-          success(token)
-          return
+      
+      sign(
+        jwtPayload,
+        APP_CONFIG.authSecret,
+        { expiresIn: '60m' },
+        (err, token) => {
+          if (err === null && token != null) {
+            success(token)
+            return
+          }
+          throw new GenericError('Signing error')
         }
-        throw new GenericError('Signing error')
-      })
+      )
     } else {
       throw new GenericError('Password mismatch')
     }

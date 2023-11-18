@@ -68,6 +68,16 @@ async function getPost(
   throw new GenericError(`There is no post with id '${postId}'`)
 }
 
+async function getFormattedPost(postId: string): Promise<IFormattedPostDto> {
+  const post = await getPost(postId)
+  return {
+    ...post,
+    author: post.author.username,
+    updated: post.updated != null ? formatISO(post.updated) : null,
+    published: formatISO(post.published),
+  }
+}
+
 async function getPosts(
   offset: number,
   count: number
@@ -101,4 +111,11 @@ async function deletePost(
   throw new GenericError("Only post's author can delete this post")
 }
 
-export { createPost, updatePost, getPost, getPosts, deletePost }
+export {
+  createPost,
+  updatePost,
+  getPost,
+  getPosts,
+  deletePost,
+  getFormattedPost
+}

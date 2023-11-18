@@ -5,6 +5,10 @@ export interface IAuthRequestDto {
   password: string
 }
 
+export interface IRefreshTokenRequestDto {
+  refreshToken: string
+}
+
 interface IAuthResponseDto {
   token: string
 }
