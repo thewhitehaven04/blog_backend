@@ -8,8 +8,9 @@ export interface ICreatePostRequestDto {
   published: string
 }
 
-export interface IUpdatePostRequestDto extends ICreatePostRequestDto {
-  updated: string
+export interface IUpdatePostRequestDto {
+  title?: string,
+  text?: string
 }
 
 export interface IGetPostsRequestParamsDto {

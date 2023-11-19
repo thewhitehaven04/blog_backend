@@ -29,9 +29,8 @@ async function getPosts(
 ): Promise<TPostDocument[]> {
   return await PostModel.find()
     .sort({ published: 'desc' })
-    .limit(count)
     .skip(offset)
-    .exec()
+    .limit(count)
 }
 
 async function deletePost(postId: string): Promise<void> {

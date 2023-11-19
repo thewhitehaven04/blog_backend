@@ -17,6 +17,8 @@ export interface IPostCreateModel {
   published: Date
 }
 
-export interface IPostUpdateModel extends IPostCreateModel {
+export interface IPostUpdateModel {
+  title?: string
+  text?: string
   updated: Date
 }

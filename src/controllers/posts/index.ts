@@ -50,23 +50,18 @@ const updatePost = [
   )
 ]
 
-const getPosts = [
-  expressAsyncHandler(
-    async (
-      req: Request<IGetPostsRequestParamsDto>,
-      res: Response<TPostsCollectionResponseDto>
-    ) => {
-      const posts = await PostService.getPosts(
-        req.params.offset,
-        req.params.count
-      )
-      res.json({
-        success: true,
-        data: posts
-      })
-    }
-  )
-]
+const getPosts = expressAsyncHandler(
+  async (
+    req: Request<any, any, any, IGetPostsRequestParamsDto>,
+    res: Response<TPostsCollectionResponseDto>
+  ) => {
+    const posts = await PostService.getPosts(req.query.offset, req.query.count)
+    res.json({
+      success: true,
+      data: posts
+    })
+  }
+)
 
 const deletePosts = [
   verifyTokenAndAttachAsContext,
@@ -79,9 +74,9 @@ const deletePosts = [
 ]
 
 const getPost = expressAsyncHandler(
-  async (req: Request<{id: string}>, res: Response<TPostResponseDto>) => {
+  async (req: Request<{ id: string }>, res: Response<TPostResponseDto>) => {
     const post = await PostService.getFormattedPost(req.params.id)
-    res.json({success: true, data: post})
+    res.json({ success: true, data: post })
   }
 )
 

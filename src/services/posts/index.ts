@@ -47,9 +47,7 @@ async function updatePost(
 ): Promise<void> {
   const post: IPostUpdateModel = {
     ...updatePostRequest,
-    author: new Types.ObjectId(updatePostRequest.author),
     updated: new Date(),
-    published: new Date(updatePostRequest.published)
   }
 
   await PostRepository.updatePost(postId, post)
@@ -60,7 +58,7 @@ async function getPost(
 ): Promise<
   IPostModel & { _id: Types.ObjectId } & Required<{ _id: Types.ObjectId }>
 > {
-  const post = (await PostRepository.getPost(postId))?.toObject()
+  const post = (await PostRepository.getPost(postId))?.toJSON()
   if (post != null) {
     return post
   }
