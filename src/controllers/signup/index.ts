@@ -7,11 +7,12 @@ import { type TGenericResponse } from '../types'
 const postSignUp = expressAsyncHandler(
   async (
     req: Request<any, any, ISignUpRequestDto>,
-    res: Response<TGenericResponse<null>>
+    res: Response<TGenericResponse>
   ) => {
     await SignupService.signUp(req.body)
     res.send({
-      success: true
+      success: true,
+      data: null
     })
   }
 )

@@ -4,6 +4,9 @@ import { GenericError } from '../appError'
 import { type TGenericResponse } from '../controllers/types'
 import APP_CONFIG from '../appConfig'
 import { verify } from 'jsonwebtoken'
+import debug from 'debug'
+
+const logVerify = debug('verifyToken')
 
 function parseAuthHeaderForBearerToken(headers: IncomingHttpHeaders): string {
   const regexp = /Bearer (.+)/
@@ -19,8 +22,10 @@ export function verifyTokenAndAttachAsContext(
   next: NextFunction
 ): void {
   const token = parseAuthHeaderForBearerToken(req.headers)
+  logVerify('Token received: %s', token)
 
   verify(token, APP_CONFIG.authSecret, (error, decoded) => {
+    logVerify('errors: %s\ndecoded: %s', error, decoded)
     if (error != null) {
       res.status(401).json({
         success: false,

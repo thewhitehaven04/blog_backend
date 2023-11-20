@@ -25,7 +25,6 @@ async function auth(
       sign(
         jwtPayload,
         APP_CONFIG.authSecret,
-        { expiresIn: '60m' },
         (err, token) => {
           if (err === null && token != null) {
             success(token)
