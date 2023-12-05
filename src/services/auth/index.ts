@@ -21,24 +21,20 @@ async function auth(
         id: user.id,
         email: user.email
       }
-      
-      sign(
-        jwtPayload,
-        APP_CONFIG.authSecret,
-        (err, token) => {
-          if (err === null && token != null) {
-            success(token)
-            return
-          }
-          throw new GenericError('Signing error')
+
+      sign(jwtPayload, APP_CONFIG.authSecret, (err, token) => {
+        if (err === null && token != null) {
+          success(token)
+          return
         }
-      )
+        throw new GenericError('Signing error')
+      })
     } else {
       throw new GenericError('Password mismatch')
     }
     return
   }
-  throw new GenericError('No user')
+  throw new GenericError('There is no user with specified credentials')
 }
 
 export { auth }
