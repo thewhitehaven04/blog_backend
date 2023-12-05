@@ -19,9 +19,9 @@ const createPostRequestSchema: Schema<DefaultSchemaKeys> = {
     errorMessage: 'Post text must not be empty'
   },
   published: {
-    isDate: true,
+    isISO8601: true,
     optional: false,
-    errorMessage: 'Published field must contain a date'
+    errorMessage: 'Published field must contain a date in the ISO8601 format'
   },
   author: {
     isString: true,
