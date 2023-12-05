@@ -11,7 +11,7 @@ const genericErrorHandler = (
   if (err instanceof GenericError) {
     res.json({
       success: false,
-      errors: [err.serialize()]
+      errors: err.serialize()
     })
   }
   next(err)

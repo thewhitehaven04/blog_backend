@@ -2,9 +2,9 @@ import { type TApplicationErrorDto } from './typings/error'
 
 export class GenericError extends Error {
   serialize(): TApplicationErrorDto {
-    return {
+    return [{
       message: this.message,
       cause: this.cause
-    }
+    }]
   }
 }
