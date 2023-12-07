@@ -34,7 +34,7 @@ async function getPosts(
 }
 
 async function deletePost(postId: string): Promise<void> {
-  await PostModel.deleteOne({ id: postId }).exec()
+  await PostModel.findByIdAndDelete(postId).exec()
 }
 
 export { savePost, updatePost, getPost, getPosts, deletePost }
