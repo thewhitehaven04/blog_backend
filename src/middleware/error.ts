@@ -16,5 +16,16 @@ const genericErrorHandler = (
   }
   next(err)
 }
+/** returns all errors as json */
+export const catchAllHandler = (
+   err: any, 
+   req: any, 
+   res: any, 
+): void => {
+  res.json({
+    success: false,
+    errors: [err]  
+  })
+}
 
 export { genericErrorHandler }
