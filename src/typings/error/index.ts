@@ -1,8 +1,12 @@
-import { type ValidationError } from 'express-validator'
-
 interface IGenericError {
   message: string
-  cause: unknown 
+  cause: unknown
+}
+
+export interface ISerializedValidationError {
+  message: string
 } 
 
-export type TApplicationErrorDto = IGenericError[] | ValidationError[] 
+export type TApplicationErrorDto =
+  | IGenericError[]
+  | ISerializedValidationError[]

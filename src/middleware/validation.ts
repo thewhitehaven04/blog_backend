@@ -7,6 +7,14 @@ import {
 import { type TGenericResponse } from '../controllers/types'
 import expressAsyncHandler from 'express-async-handler'
 import { type ContextRunner } from 'express-validator/src/chain'
+import { type ISerializedValidationError } from '../typings/error'
+import { type ValidationError, type ErrorFormatter } from 'express-validator'
+
+const fieldValidationErrorFormatter: ErrorFormatter<
+  ISerializedValidationError
+> = (err: ValidationError) => {
+  return { message: err.msg }
+}
 
 export function validateRequest<T>(
   validators: ContextRunner[]
@@ -19,11 +27,11 @@ export function validateRequest<T>(
     ) => {
       for (const validator of validators) {
         const result = await validator.run(req)
-        
+
         if (result.context.errors.length > 0) {
           res.status(400).json({
             success: false,
-            errors: result.array()
+            errors: result.formatWith(fieldValidationErrorFormatter).array()
           })
           return
         }
