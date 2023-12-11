@@ -3,7 +3,7 @@ import express from 'express'
 import { connectToDatabase, setupRouting } from './services/startup'
 import cors from 'cors'
 import routerMap from './routes/routeMap'
-import { catchAllHandler, genericErrorHandler } from './middleware/error'
+import { genericErrorHandler } from './middleware/error'
 
 config()
 connectToDatabase(process.env.CONNECTION_STRING)
@@ -14,6 +14,6 @@ app.use(express.json())
 
 setupRouting(app, routerMap)
 app.use(genericErrorHandler)
-app.use(catchAllHandler)
+// app.use(catchAllHandler)
 
 app.listen(process.env.PORT)

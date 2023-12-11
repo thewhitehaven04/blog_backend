@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node src/app.ts",
-    "dev": "DEBUG=*,-express nodemon -e ts -q src/app.ts"
+    "dev": "DEBUG=*,-express nodemon -e ts-node -q src/app.ts"
   },
   "repository": {
     "type": "git",
