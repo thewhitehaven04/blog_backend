@@ -3,7 +3,8 @@ import {
   type IPostCreateModel,
   type IPostUpdateModel
 } from '../../models/post/types'
-import { type TPostDocument } from './types'
+import { type ISecureUser } from '../../models/user/types'
+import { type TPopulatedPostDocument, type TPostDocument } from './types'
 
 async function savePost(post: IPostCreateModel): Promise<TPostDocument> {
   return await PostModel.create({
@@ -19,15 +20,24 @@ async function updatePost(
   await PostModel.findByIdAndUpdate(postId, post).exec()
 }
 
-async function getPost(postId: string): Promise<TPostDocument | null> {
-  return await PostModel.findById(postId).exec()
+async function getPost(postId: string): Promise<TPopulatedPostDocument | null> {
+  return await PostModel.findById(postId)
+    .populate<{ author: ISecureUser }>({
+      path: 'author',
+      select: 'username email'
+    })
+    .exec()
 }
 
 async function getPosts(
   count: number,
   offset: number
-): Promise<TPostDocument[]> {
+): Promise<TPopulatedPostDocument[]> {
   return await PostModel.find()
+    .populate<{ author: ISecureUser }>({
+      path: 'author',
+      select: 'username email'
+    })
     .sort({ published: 'desc' })
     .skip(offset)
     .limit(count)
@@ -37,4 +47,8 @@ async function deletePost(postId: string): Promise<void> {
   await PostModel.findByIdAndDelete(postId).exec()
 }
 
-export { savePost, updatePost, getPost, getPosts, deletePost }
+async function getPostCount(): Promise<number> {
+  return await PostModel.find().countDocuments()
+}
+
+export { savePost, updatePost, getPost, getPosts, deletePost, getPostCount }

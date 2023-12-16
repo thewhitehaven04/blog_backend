@@ -1,5 +1,5 @@
 import { type Types } from 'mongoose'
-import { type IUserModel } from '../user/types'
+import { type ISecureUser, type IUserModel } from '../user/types'
 
 export interface IPostModel {
   title: string
@@ -8,6 +8,10 @@ export interface IPostModel {
   published: Date
   updated: Date | null
   isPublished: boolean
+}
+
+export interface IPostReadModel extends Omit<IPostModel, 'author'> {
+  author: ISecureUser
 }
 
 export interface IPostCreateModel {

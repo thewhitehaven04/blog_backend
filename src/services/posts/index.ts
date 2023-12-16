@@ -1,4 +1,4 @@
-import { Types } from 'mongoose'
+import { type FlattenMaps, Types } from 'mongoose'
 import {
   type IUpdatePostRequestDto,
   type ICreatePostRequestDto
@@ -10,7 +10,7 @@ import {
 } from '../../models/post/types'
 import * as PostRepository from './../../repository/posts'
 import * as UserRepository from './../../repository/user'
-import { type IFormattedPostDto } from './types'
+import { type IPostsCollectionDto, type IFormattedPostDto } from './types'
 import { GenericError } from '../../appError'
 import { type IUserContext } from '../../typings/request'
 import formatISO from 'date-fns/formatISO'
@@ -34,8 +34,7 @@ async function createPost(
     return {
       ...(await postData.toJSON()),
       updated: postData.updated != null ? formatISO(postData.updated) : null,
-      published: formatISO(postData.published),
-      author: user.username
+      published: formatISO(postData.published)
     }
   }
   throw new GenericError(`No user ${postRequest.author} found`)
@@ -47,7 +46,7 @@ async function updatePost(
 ): Promise<void> {
   const post: IPostUpdateModel = {
     ...updatePostRequest,
-    updated: new Date(),
+    updated: new Date()
   }
 
   await PostRepository.updatePost(postId, post)
@@ -55,9 +54,7 @@ async function updatePost(
 
 async function getPost(
   postId: string
-): Promise<
-  IPostModel & { _id: Types.ObjectId } & Required<{ _id: Types.ObjectId }>
-> {
+): Promise<FlattenMaps<IPostModel & { _id: Types.ObjectId }>> {
   const post = (await PostRepository.getPost(postId))?.toJSON()
   if (post != null) {
     return post
@@ -70,27 +67,30 @@ async function getFormattedPost(postId: string): Promise<IFormattedPostDto> {
   const post = await getPost(postId)
   return {
     ...post,
-    author: post.author.username,
     updated: post.updated != null ? formatISO(post.updated) : null,
-    published: formatISO(post.published),
+    published: formatISO(post.published)
   }
 }
 
 async function getPosts(
   offset: number,
   count: number
-): Promise<IFormattedPostDto[]> {
-  const posts = await PostRepository.getPosts(count, offset)
+): Promise<IPostsCollectionDto> {
+  const [posts, totalCount] = await Promise.all([
+    await PostRepository.getPosts(count, offset),
+    await PostRepository.getPostCount()
+  ])
 
-  const transformed = posts.map(async (post) => {
-    return {
-      ...post.toJSON(),
-      updated: post.updated != null ? formatISO(post.updated) : null,
-      published: formatISO(post.published),
-      author: post.author.username
-    }
-  })
-  return await Promise.all(transformed)
+  const transformedPosts = await Promise.all(
+    posts.map(async (post) => {
+      return {
+        ...post.toJSON(),
+        updated: post.updated != null ? formatISO(post.updated) : null,
+        published: formatISO(post.published)
+      }
+    })
+  )
+  return { posts: transformedPosts, totalCount }
 }
 
 async function deletePost(
