@@ -1,19 +1,24 @@
 import expressAsyncHandler from 'express-async-handler'
 import { type Response, type Request } from 'express'
 import {
+  type TGetPostCommentResponseDto,
   type IPostCommentRequestDto,
-  type TPostCommentResponseDto
+  type TPostCommentResponseDto,
+  type ICommentRequestParams
 } from './types'
 import * as CommentService from './../../services/comment'
 import { type TGenericResponse } from '../types'
 import { verifyTokenAndAttachAsContext } from '../../middleware/verifyToken'
-import { createPostRequestSchema, updatePostRequestSchema } from '../posts/validator'
+import {
+  updatePostRequestSchema
+} from '../posts/validator'
 import { validateRequest } from '../../middleware/validation'
 import { checkSchema } from 'express-validator'
+import { postCommentSchema } from './validator'
 
 const postCommentPost = [
   verifyTokenAndAttachAsContext,
-  validateRequest(checkSchema(createPostRequestSchema)),
+  validateRequest(checkSchema(postCommentSchema)),
   expressAsyncHandler(
     async (
       req: Request<{ postId: string }, any, IPostCommentRequestDto, any>,
@@ -69,4 +74,24 @@ const deleteCommentPost = [
   )
 ]
 
-export { postCommentPost, updateCommentPost, deleteCommentPost }
+const getPostComments = expressAsyncHandler(
+  async (
+    req: Request<{ postId: string }, any, any, ICommentRequestParams>,
+    res: Response<TGetPostCommentResponseDto>
+  ) => {
+    const { count, offset } = req.query
+    const { postId } = req.params
+    const comments = await CommentService.getPostComments(postId, count, offset)
+    res.json({
+      success: true,
+      data: comments
+    })
+  }
+)
+
+export {
+  postCommentPost,
+  updateCommentPost,
+  deleteCommentPost,
+  getPostComments
+}

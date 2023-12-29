@@ -1,6 +1,7 @@
 import CommentModel from '../../models/comment'
 import { type ICommentModel } from '../../models/comment/types'
-import { type TCommentDocument } from './types'
+import { type ISecureUser } from '../../models/user/types'
+import { type TPopulatedCommentDocument, type TCommentDocument } from './types'
 
 async function saveComment(comment: ICommentModel): Promise<TCommentDocument> {
   return await CommentModel.create(comment)
@@ -20,4 +21,19 @@ async function getComment(commentId: string): Promise<TCommentDocument | null> {
   return await CommentModel.findById(commentId).exec()
 }
 
-export { saveComment, updateComment, deleteComment, getComment }
+async function getComments(
+  postId: string,
+  count: number,
+  offset: number
+): Promise<TPopulatedCommentDocument[]> {
+  return await CommentModel.find({ post: postId })
+    .populate<{ author: ISecureUser }>({
+      path: 'author',
+      select: 'username email'
+    })
+    .sort({ created: 'desc' })
+    .skip(offset)
+    .limit(count)
+}
+
+export { saveComment, updateComment, deleteComment, getComment, getComments }

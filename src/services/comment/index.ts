@@ -4,6 +4,7 @@ import * as CommentRepository from './../../repository/comment'
 import * as PostService from './../../services/posts'
 import { type IUserContext } from '../../typings/request'
 import { GenericError } from '../../appError'
+import { type ITransformedCommentDataDto } from './types'
 
 async function addCommentToPost(
   postId: string,
@@ -51,4 +52,19 @@ async function deletePostComment(
   throw new GenericError('Cannot remove comment made by another user')
 }
 
-export { addCommentToPost, updatePostComment, deletePostComment }
+async function getPostComments(
+  postId: string,
+  count: number,
+  offset: number 
+): Promise<ITransformedCommentDataDto[]> {
+  const comments = await CommentRepository.getComments(postId, count, offset)
+
+  return await Promise.all(comments.map(comment => comment.toJSON()))
+}
+
+export {
+  addCommentToPost,
+  updatePostComment,
+  deletePostComment,
+  getPostComments
+}

@@ -5,7 +5,7 @@ interface IGenericError {
 
 export interface ISerializedValidationError {
   message: string
-} 
+}
 
 export type TApplicationErrorDto =
   | IGenericError[]
