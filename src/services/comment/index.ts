@@ -55,11 +55,17 @@ async function deletePostComment(
 async function getPostComments(
   postId: string,
   count: number,
-  offset: number 
-): Promise<ITransformedCommentDataDto[]> {
-  const comments = await CommentRepository.getComments(postId, count, offset)
+  offset: number
+): Promise<ITransformedCommentDataDto> {
+  const [comments, commentCount] = await Promise.all([
+    CommentRepository.getComments(postId, count, offset),
+    CommentRepository.getCommentCount()
+  ])
 
-  return await Promise.all(comments.map(comment => comment.toJSON()))
+  return {
+    comments: await Promise.all(comments.map((comment) => comment.toJSON())),
+    count: commentCount
+  }
 }
 
 export {

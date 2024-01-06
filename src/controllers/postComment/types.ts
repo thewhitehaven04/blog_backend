@@ -13,5 +13,5 @@ export interface ICommentRequestParams {
 }
 
 export type TGetPostCommentResponseDto = TGenericResponse<
-  ITransformedCommentDataDto[]
+  ITransformedCommentDataDto
 >

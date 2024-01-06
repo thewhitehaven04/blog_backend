@@ -36,4 +36,15 @@ async function getComments(
     .limit(count)
 }
 
-export { saveComment, updateComment, deleteComment, getComment, getComments }
+async function getCommentCount(): Promise<number> {
+  return await CommentModel.countDocuments()
+}
+
+export {
+  saveComment,
+  updateComment,
+  deleteComment,
+  getComment,
+  getComments,
+  getCommentCount
+}
