@@ -4,4 +4,5 @@ export interface ITransformedCommentDataDto {
     email: string
     username: string
   }
+  created: string
 }

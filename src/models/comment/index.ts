@@ -8,6 +8,11 @@ const CommentSchema = new Schema<ICommentModel>({
   post: { type: Schema.Types.ObjectId, ref: 'post', required: true }
 })
 
+CommentSchema.set('toJSON', {
+  virtuals: true,
+  versionKey: false,
+})
+
 const CommentModel = model('comment', CommentSchema)
 
 export default CommentModel
