@@ -46,7 +46,7 @@
     "eslint-plugin-promise": "^6.1.1",
     "nodemon": "^3.0.1",
     "prettier-config-standard": "^7.0.0",
-    "typescript": "5.2.2",
-    "ts-node": "10.9.1"
+    "ts-node": "10.9.1",
+    "typescript": "5.2.2"
   }
 }

@@ -64,7 +64,8 @@ async function getPostComments(
 
   return {
     comments: await Promise.all(comments.map((comment) => comment.toJSON())),
-    count: commentCount
+    count: commentCount,
+    offset 
   }
 }
 

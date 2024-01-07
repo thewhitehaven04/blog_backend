@@ -34,13 +34,13 @@ async function getPosts(
   offset: number
 ): Promise<TPopulatedPostDocument[]> {
   return await PostModel.find()
+    .sort({ published: 'desc' })
+    .skip(offset)
+    .limit(count)
     .populate<{ author: ISecureUser }>({
       path: 'author',
       select: 'username email'
     })
-    .sort({ published: 'desc' })
-    .skip(offset)
-    .limit(count)
 }
 
 async function deletePost(postId: string): Promise<void> {

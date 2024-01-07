@@ -27,13 +27,13 @@ async function getComments(
   offset: number
 ): Promise<TPopulatedCommentDocument[]> {
   return await CommentModel.find({ post: postId })
+    .sort({ created: 'desc' })
+    .skip(offset)
+    .limit(count)
     .populate<{ author: ISecureUser }>({
       path: 'author',
       select: 'username email'
     })
-    .sort({ created: 'desc' })
-    .skip(offset)
-    .limit(count)
 }
 
 async function getCommentCount(): Promise<number> {

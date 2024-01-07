@@ -8,4 +8,5 @@ export interface ITransformedCommentDataDto {
     created: string
   }>
   count: number
+  offset: number
 }

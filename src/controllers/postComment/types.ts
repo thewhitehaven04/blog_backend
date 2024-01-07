@@ -8,8 +8,8 @@ export interface IPostCommentRequestDto {
 }
 
 export interface ICommentRequestParams {
-  count: number
-  offset: number
+  count: string 
+  offset: string 
 }
 
 export type TGetPostCommentResponseDto = TGenericResponse<

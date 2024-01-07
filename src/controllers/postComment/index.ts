@@ -9,9 +9,7 @@ import {
 import * as CommentService from './../../services/comment'
 import { type TGenericResponse } from '../types'
 import { verifyTokenAndAttachAsContext } from '../../middleware/verifyToken'
-import {
-  updatePostRequestSchema
-} from '../posts/validator'
+import { updatePostRequestSchema } from '../posts/validator'
 import { validateRequest } from '../../middleware/validation'
 import { checkSchema } from 'express-validator'
 import { postCommentSchema } from './validator'
@@ -81,7 +79,11 @@ const getPostComments = expressAsyncHandler(
   ) => {
     const { count, offset } = req.query
     const { postId } = req.params
-    const comments = await CommentService.getPostComments(postId, count, offset)
+    const comments = await CommentService.getPostComments(
+      postId,
+      parseInt(count),
+      parseInt(offset)
+    )
     res.json({
       success: true,
       data: comments
