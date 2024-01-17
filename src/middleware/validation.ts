@@ -4,7 +4,7 @@ import {
   type Request,
   type Response
 } from 'express'
-import { type TGenericResponse } from '../controllers/types'
+import { type TGenericResponse } from '../controllers/types/response'
 import expressAsyncHandler from 'express-async-handler'
 import { type ContextRunner } from 'express-validator/src/chain'
 import { type ISerializedValidationError } from '../typings/error'

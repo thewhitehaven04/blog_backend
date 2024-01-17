@@ -1,7 +1,7 @@
 import { type NextFunction, type Request, type Response } from 'express'
 import { type IncomingHttpHeaders } from 'http'
 import { GenericError } from '../appError'
-import { type TGenericResponse } from '../controllers/types'
+import { type TGenericResponse } from '../controllers/types/response'
 import APP_CONFIG from '../appConfig'
 import { verify } from 'jsonwebtoken'
 import debug from 'debug'

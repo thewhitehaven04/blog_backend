@@ -1,4 +1,4 @@
-import { type TGenericResponse } from '../types'
+import { type TGenericResponse } from '../types/response'
 
 export interface IAuthRequestDto {
   username: string

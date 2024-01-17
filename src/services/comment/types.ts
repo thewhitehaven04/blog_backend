@@ -1,12 +1,8 @@
-export interface ITransformedCommentDataDto {
-  comments: Array<{
-    text: string
-    author: {
-      email: string
-      username: string
-    }
-    created: string
-  }>
-  count: number
-  offset: number
+export interface ITransformedCommentDto {
+  text: string
+  author: {
+    email: string
+    username: string
+  }
+  created: string
 }

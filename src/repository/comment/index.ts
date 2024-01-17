@@ -3,8 +3,15 @@ import { type ICommentModel } from '../../models/comment/types'
 import { type ISecureUser } from '../../models/user/types'
 import { type TPopulatedCommentDocument, type TCommentDocument } from './types'
 
-async function saveComment(comment: ICommentModel): Promise<TCommentDocument> {
-  return await CommentModel.create(comment)
+async function saveComment(
+  comment: ICommentModel
+): Promise<TPopulatedCommentDocument> {
+  return await (
+    await CommentModel.create(comment)
+  ).populate<{ author: ISecureUser }>({
+    path: 'author',
+    select: 'username email'
+  })
 }
 
 async function updateComment(id: string, commentText: string): Promise<void> {

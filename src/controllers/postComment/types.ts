@@ -1,5 +1,6 @@
-import { type ITransformedCommentDataDto } from '../../services/comment/types'
-import { type TGenericResponse } from '../types'
+import e from 'express'
+import { type ITransformedCommentDto } from '../../services/comment/types'
+import { type TPaginatedResponse, type TGenericResponse } from '../types/response'
 
 export type TPostCommentResponseDto = TGenericResponse<{ id: string }>
 
@@ -12,6 +13,6 @@ export interface ICommentRequestParams {
   offset: string 
 }
 
-export type TGetPostCommentResponseDto = TGenericResponse<
-  ITransformedCommentDataDto
+export type TGetPostCommentResponseDto = TPaginatedResponse<
+  ITransformedCommentDto
 >

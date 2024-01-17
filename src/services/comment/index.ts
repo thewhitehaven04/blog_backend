@@ -4,23 +4,24 @@ import * as CommentRepository from './../../repository/comment'
 import * as PostService from './../../services/posts'
 import { type IUserContext } from '../../typings/request'
 import { GenericError } from '../../appError'
-import { type ITransformedCommentDataDto } from './types'
+import { type ITransformedCommentDto } from './types'
+import { type IPaginatedData } from '../../controllers/types/pagination'
 
 async function addCommentToPost(
   postId: string,
   comment: IPostCommentRequestDto,
   userContext: IUserContext
-): Promise<string> {
+): Promise<ITransformedCommentDto> {
   const post = await PostService.getPost(postId)
 
   if (userContext.id != null) {
-    const { _id } = await CommentRepository.saveComment({
+    const savedComment = await CommentRepository.saveComment({
       ...comment,
       author: new Types.ObjectId(userContext.id),
       post: new Types.ObjectId(post._id),
       created: new Date()
     })
-    return _id.toString()
+    return await savedComment.toJSON()
   }
   throw new GenericError('Invalid user')
 }
@@ -56,16 +57,19 @@ async function getPostComments(
   postId: string,
   count: number,
   offset: number
-): Promise<ITransformedCommentDataDto> {
+): Promise<IPaginatedData<ITransformedCommentDto>> {
   const [comments, commentCount] = await Promise.all([
     CommentRepository.getComments(postId, count, offset),
     CommentRepository.getCommentCount()
   ])
 
   return {
-    comments: await Promise.all(comments.map((comment) => comment.toJSON())),
-    count: commentCount,
-    offset 
+    data: await Promise.all(comments.map((comment) => comment.toJSON())),
+    pagination: {
+      totalCount: commentCount,
+      count,
+      offset
+    }
   }
 }
 

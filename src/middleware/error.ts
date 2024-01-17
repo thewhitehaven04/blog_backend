@@ -1,5 +1,5 @@
 import { GenericError } from '../appError'
-import { type TGenericResponse } from '../controllers/types'
+import { type TGenericResponse } from '../controllers/types/response'
 import { type Response } from 'express'
 
 const genericErrorHandler = (

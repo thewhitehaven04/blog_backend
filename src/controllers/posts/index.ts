@@ -12,7 +12,7 @@ import {
 import * as PostService from '../../services/posts'
 import { verifyTokenAndAttachAsContext } from '../../middleware/verifyToken'
 import { createPostRequestSchema, updatePostRequestSchema } from './validator'
-import { type TGenericResponse } from '../types'
+import { type TGenericResponse } from '../types/response'
 import { validateRequest } from '../../middleware/validation'
 import { checkSchema } from 'express-validator'
 

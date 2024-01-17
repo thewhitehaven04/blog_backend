@@ -3,16 +3,16 @@ import { type Response, type Request } from 'express'
 import {
   type TGetPostCommentResponseDto,
   type IPostCommentRequestDto,
-  type TPostCommentResponseDto,
   type ICommentRequestParams
 } from './types'
 import * as CommentService from './../../services/comment'
-import { type TGenericResponse } from '../types'
+import { type TGenericResponse } from '../types/response'
 import { verifyTokenAndAttachAsContext } from '../../middleware/verifyToken'
 import { updatePostRequestSchema } from '../posts/validator'
 import { validateRequest } from '../../middleware/validation'
 import { checkSchema } from 'express-validator'
 import { postCommentSchema } from './validator'
+import { type ITransformedCommentDto } from '../../services/comment/types'
 
 const postCommentPost = [
   verifyTokenAndAttachAsContext,
@@ -20,16 +20,16 @@ const postCommentPost = [
   expressAsyncHandler(
     async (
       req: Request<{ postId: string }, any, IPostCommentRequestDto, any>,
-      res: Response<TPostCommentResponseDto>
+      res: Response<TGenericResponse<ITransformedCommentDto>>
     ) => {
-      const commentId = await CommentService.addCommentToPost(
+      const comment = await CommentService.addCommentToPost(
         req.params.postId,
         req.body,
         req.context
       )
       res.json({
         success: true,
-        data: { id: commentId }
+        data: comment 
       })
     }
   )
@@ -79,14 +79,14 @@ const getPostComments = expressAsyncHandler(
   ) => {
     const { count, offset } = req.query
     const { postId } = req.params
-    const comments = await CommentService.getPostComments(
+    const paginatedData = await CommentService.getPostComments(
       postId,
       parseInt(count),
       parseInt(offset)
     )
     res.json({
       success: true,
-      data: comments
+      ...paginatedData
     })
   }
 )

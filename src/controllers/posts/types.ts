@@ -1,6 +1,6 @@
 import { type IPostsCollectionDto, type IFormattedPostDto } from '../../services/posts/types'
 import { IPostCommentRequestDto } from '../postComment/types'
-import { type TGenericResponse } from '../types'
+import { type TGenericResponse } from '../types/response'
 
 export interface ICreatePostRequestDto {
   title: string
