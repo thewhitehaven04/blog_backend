@@ -1,4 +1,3 @@
-
 export interface IPaginationDto {
   totalCount: number
   count: number

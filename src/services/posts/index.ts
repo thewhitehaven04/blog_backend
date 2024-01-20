@@ -10,10 +10,11 @@ import {
 } from '../../models/post/types'
 import * as PostRepository from './../../repository/posts'
 import * as UserRepository from './../../repository/user'
-import { type IPostsCollectionDto, type IFormattedPostDto } from './types'
+import { type IFormattedPostDto } from './types'
 import { GenericError } from '../../appError'
 import { type IUserContext } from '../../typings/request'
 import formatISO from 'date-fns/formatISO'
+import { type IPaginatedData } from '../../controllers/types/pagination'
 
 async function createPost(
   postRequest: ICreatePostRequestDto
@@ -75,7 +76,7 @@ async function getFormattedPost(postId: string): Promise<IFormattedPostDto> {
 async function getPosts(
   offset: number,
   count: number
-): Promise<IPostsCollectionDto> {
+): Promise<IPaginatedData<IFormattedPostDto>> {
   const [posts, totalCount] = await Promise.all([
     await PostRepository.getPosts(count, offset),
     await PostRepository.getPostCount()
@@ -90,7 +91,14 @@ async function getPosts(
       }
     })
   )
-  return { posts: transformedPosts, totalCount }
+  return {
+    data: transformedPosts,
+    pagination: {
+      offset,
+      count,
+      totalCount
+    }
+  }
 }
 
 async function deletePost(

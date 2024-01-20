@@ -55,10 +55,14 @@ const getPosts = expressAsyncHandler(
     req: Request<any, any, any, IGetPostsRequestParamsDto>,
     res: Response<TPostsCollectionResponseDto>
   ) => {
-    const posts = await PostService.getPosts(req.query.offset, req.query.count)
+    const { data, pagination } = await PostService.getPosts(
+      req.query.offset,
+      req.query.count
+    )
     res.json({
       success: true,
-      data: posts
+      data,
+      pagination
     })
   }
 )

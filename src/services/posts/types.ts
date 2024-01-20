@@ -8,8 +8,3 @@ export interface IFormattedPostDto {
   published: string
   isPublished: boolean
 }
-
-export interface IPostsCollectionDto {
-  posts: IFormattedPostDto[],
-  totalCount: number
-}
