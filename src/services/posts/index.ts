@@ -15,6 +15,7 @@ import { GenericError } from '../../appError'
 import { type IUserContext } from '../../typings/request'
 import formatISO from 'date-fns/formatISO'
 import { type IPaginatedData } from '../../controllers/types/pagination'
+import { type TPopulatedPostDocument } from '../../repository/posts/types'
 
 async function createPost(
   postRequest: ICreatePostRequestDto
@@ -73,12 +74,20 @@ async function getFormattedPost(postId: string): Promise<IFormattedPostDto> {
   }
 }
 
+const transformPost = (post: TPopulatedPostDocument): IFormattedPostDto => {
+  return {
+    ...post.toJSON(),
+    updated: post.updated != null ? formatISO(post.updated) : null,
+    published: formatISO(post.published)
+  }
+}
+
 async function getPosts(
   offset: number,
   count: number
 ): Promise<IPaginatedData<IFormattedPostDto>> {
   const [posts, totalCount] = await Promise.all([
-    await PostRepository.getPosts(count, offset),
+    await PostRepository.getPosts({ count, offset }),
     await PostRepository.getPostCount()
   ])
 
@@ -117,11 +126,36 @@ async function deletePost(
   throw new GenericError("Only post's author can delete this post")
 }
 
+async function getReadMore(
+  excludingPostId: string
+): Promise<IPaginatedData<IFormattedPostDto>> {
+  // get most recent posts
+  const MORE_POSTS_COUNT = 3
+  const MORE_POSTS_OFFSET = 0
+
+  const posts = await PostRepository.getPosts({
+    count: MORE_POSTS_COUNT,
+    offset: MORE_POSTS_OFFSET,
+    filterPosts: [excludingPostId]
+  })
+  const transformedPosts = posts.map((post) => transformPost(post))
+
+  return {
+    data: transformedPosts,
+    pagination: {
+      count: MORE_POSTS_COUNT,
+      offset: MORE_POSTS_OFFSET,
+      totalCount: MORE_POSTS_COUNT
+    }
+  }
+}
+
 export {
   createPost,
   updatePost,
   getPost,
   getPosts,
   deletePost,
-  getFormattedPost
+  getFormattedPost,
+  getReadMore
 }

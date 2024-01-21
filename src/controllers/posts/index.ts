@@ -84,4 +84,21 @@ const getPost = expressAsyncHandler(
   }
 )
 
-export { createPost, updatePost, getPosts, deletePosts, getPost }
+const getReadMore = expressAsyncHandler(
+  async (
+    req: Request<any, any, any, { excludingPost: string }>,
+    res: Response<TPostsCollectionResponseDto>
+  ) => {
+    const { data, pagination } = await PostService.getReadMore(
+      req.query.excludingPost
+    )
+
+    res.json({
+      success: true,
+      data,
+      pagination
+    })
+  }
+)
+
+export { createPost, updatePost, getPosts, deletePosts, getPost, getReadMore }

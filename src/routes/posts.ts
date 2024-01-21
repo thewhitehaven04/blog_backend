@@ -6,6 +6,7 @@ postsRouter.get('/', PostsController.getPosts)
 postsRouter.post('/', ...PostsController.createPost)
 postsRouter.patch('/:id', ...PostsController.updatePost)
 postsRouter.delete('/:id', ...PostsController.deletePosts)
+postsRouter.get('/readMore', PostsController.getReadMore)
 postsRouter.get('/:id', PostsController.getPost)
 
 export default postsRouter

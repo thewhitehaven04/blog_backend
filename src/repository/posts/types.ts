@@ -18,3 +18,10 @@ export type TPopulatedPostDocument = Omit<
     },
   'author'
 > & { author: ISecureUser }
+
+
+export interface IGetPostsQueryParams {
+  count: number
+  offset: number
+  filterPosts?: string[]
+}

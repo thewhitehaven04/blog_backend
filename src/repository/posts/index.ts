@@ -4,7 +4,12 @@ import {
   type IPostUpdateModel
 } from '../../models/post/types'
 import { type ISecureUser } from '../../models/user/types'
-import { type TPopulatedPostDocument, type TPostDocument } from './types'
+import {
+  type IGetPostsQueryParams,
+  type TPopulatedPostDocument,
+  type TPostDocument
+} from './types'
+import { Types } from 'mongoose'
 
 async function savePost(post: IPostCreateModel): Promise<TPostDocument> {
   return await PostModel.create({
@@ -29,11 +34,16 @@ async function getPost(postId: string): Promise<TPopulatedPostDocument | null> {
     .exec()
 }
 
-async function getPosts(
-  count: number,
-  offset: number
-): Promise<TPopulatedPostDocument[]> {
-  return await PostModel.find()
+async function getPosts({
+  offset,
+  count,
+  filterPosts
+}: IGetPostsQueryParams): Promise<TPopulatedPostDocument[]> {
+  return await PostModel.find({
+    _id: {
+      $nin: filterPosts?.map((id) => new Types.ObjectId(id))
+    }
+  })
     .sort({ published: 'desc' })
     .skip(offset)
     .limit(count)
