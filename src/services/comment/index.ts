@@ -60,7 +60,7 @@ async function getPostComments(
 ): Promise<IPaginatedData<ITransformedCommentDto>> {
   const [comments, commentCount] = await Promise.all([
     CommentRepository.getComments(postId, count, offset),
-    CommentRepository.getCommentCount()
+    CommentRepository.getCommentCount(postId)
   ])
 
   return {

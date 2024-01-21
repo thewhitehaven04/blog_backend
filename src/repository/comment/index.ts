@@ -43,8 +43,8 @@ async function getComments(
     })
 }
 
-async function getCommentCount(): Promise<number> {
-  return await CommentModel.countDocuments()
+async function getCommentCount(postId: string): Promise<number> {
+  return await CommentModel.find({ post: postId }).countDocuments()
 }
 
 export {
