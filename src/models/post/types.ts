@@ -4,6 +4,7 @@ import { type ISecureUser, type IUserModel } from '../user/types'
 export interface IPostModel {
   title: string
   text: string
+  summary: string
   author: IUserModel 
   published: Date
   updated: Date | null

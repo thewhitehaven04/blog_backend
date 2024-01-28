@@ -28,6 +28,17 @@ const createPostRequestSchema: Schema<DefaultSchemaKeys> = {
     optional: false,
     errorMessage:
       "Author field must be a string representation of author's UUID"
+  },
+  summary: {
+    isString: true,
+    isLength: {
+      options: {
+        min: 1,
+        max: 256
+      }
+    },
+    optional: false,
+    errorMessage: 'Summary must be a non-empty string'
   }
 }
 
@@ -41,12 +52,22 @@ const updatePostRequestSchema: Schema<DefaultSchemaKeys> = {
       },
       errorMessage: 'Title name should be between 2 and 64 characters long'
     },
-    optional: true 
+    optional: true
   },
   text: {
     isString: true,
     optional: true,
     errorMessage: 'Post text must not be empty'
+  },
+  summary: {
+    isString: true,
+    isLength: {
+      options: {
+        min: 1,
+        max: 256
+      }
+    },
+    optional: false
   }
 }
 

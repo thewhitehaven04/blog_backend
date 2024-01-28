@@ -4,6 +4,7 @@ import { type IPostModel } from './types'
 const PostSchema = new Schema<IPostModel>({
   text: { type: String, required: true },
   title: { type: String, required: true },
+  summary: { type: String, required: true },
   author: { type: Schema.Types.ObjectId, ref: 'user', required: true },
   published: { type: Date, required: true },
   updated: { type: Date, required: true }
