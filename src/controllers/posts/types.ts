@@ -5,12 +5,14 @@ export interface ICreatePostRequestDto {
   title: string
   text: string
   author: string
+  summary: string
   published: string
 }
 
 export interface IUpdatePostRequestDto {
-  title?: string,
+  title?: string
   text?: string
+  summary?: string
 }
 
 export interface IGetPostsRequestParamsDto {

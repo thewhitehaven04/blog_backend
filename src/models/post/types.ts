@@ -18,6 +18,7 @@ export interface IPostReadModel extends Omit<IPostModel, 'author'> {
 export interface IPostCreateModel {
   title: string
   text: string
+  summary: string
   author: Types.ObjectId
   published: Date
 }
@@ -25,5 +26,6 @@ export interface IPostCreateModel {
 export interface IPostUpdateModel {
   title?: string
   text?: string
+  summary?: string
   updated: Date
 }

@@ -21,8 +21,7 @@ async function createPost(
   postRequest: ICreatePostRequestDto
 ): Promise<IFormattedPostDto> {
   const post: IPostCreateModel = {
-    title: postRequest.title,
-    text: postRequest.text,
+    ...postRequest,
     author: new Types.ObjectId(postRequest.author),
     published: new Date(postRequest.published)
   }
