@@ -7,7 +7,7 @@ import { type TRouterMap } from './types'
 const routerMap: TRouterMap = [
   ['/posts', postsRouter],
   ['/login', tokenRouter],
-  ['/posts', postCommentRouter],
+  ['/comment', postCommentRouter],
   ['/signup', signupRouter]
 ]
 

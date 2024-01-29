@@ -3,9 +3,9 @@ import { deleteCommentPost, getPostComments, postCommentPost, updateCommentPost 
 
 const postCommentRouter = Router()
 
-postCommentRouter.post('/comment', postCommentPost)
-postCommentRouter.delete('/comment/:commentId', ...deleteCommentPost)
-postCommentRouter.patch('/comment/:commentId', ...updateCommentPost)
-postCommentRouter.get('/comment', getPostComments)
+postCommentRouter.post('/', postCommentPost)
+postCommentRouter.delete('/:commentId', ...deleteCommentPost)
+postCommentRouter.patch('/:commentId', ...updateCommentPost)
+postCommentRouter.get('/', getPostComments)
 
 export default postCommentRouter
