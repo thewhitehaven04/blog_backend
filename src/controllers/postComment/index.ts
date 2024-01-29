@@ -19,11 +19,10 @@ const postCommentPost = [
   validateRequest(checkSchema(postCommentSchema)),
   expressAsyncHandler(
     async (
-      req: Request<{ postId: string }, any, IPostCommentRequestDto, any>,
+      req: Request<any, any, IPostCommentRequestDto, any>,
       res: Response<TGenericResponse<ITransformedCommentDto>>
     ) => {
       const comment = await CommentService.addCommentToPost(
-        req.params.postId,
         req.body,
         req.context
       )
@@ -74,11 +73,10 @@ const deleteCommentPost = [
 
 const getPostComments = expressAsyncHandler(
   async (
-    req: Request<{ postId: string }, any, any, ICommentRequestParams>,
+    req: Request<any, any, any, ICommentRequestParams>,
     res: Response<TGetPostCommentResponseDto>
   ) => {
-    const { count, offset } = req.query
-    const { postId } = req.params
+    const { count, offset, postId } = req.query
     const paginatedData = await CommentService.getPostComments(
       postId,
       parseInt(count),

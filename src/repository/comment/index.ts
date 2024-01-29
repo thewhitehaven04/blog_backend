@@ -1,3 +1,4 @@
+import { GenericError } from '../../appError'
 import CommentModel from '../../models/comment'
 import { type ICommentModel } from '../../models/comment/types'
 import { type ISecureUser } from '../../models/user/types'
@@ -24,8 +25,12 @@ async function deleteComment(commentId: string): Promise<void> {
   await CommentModel.findByIdAndDelete(commentId)
 }
 
-async function getComment(commentId: string): Promise<TCommentDocument | null> {
-  return await CommentModel.findById(commentId).exec()
+async function getComment(commentId: string): Promise<TCommentDocument> {
+  const comment = await CommentModel.findById(commentId).exec()
+  if (comment != null) {
+    return comment
+  }
+  throw new GenericError(`There is no comment with id ${commentId}`)
 }
 
 async function getComments(

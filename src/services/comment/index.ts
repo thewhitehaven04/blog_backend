@@ -8,15 +8,14 @@ import { type ITransformedCommentDto } from './types'
 import { type IPaginatedData } from '../../controllers/types/pagination'
 
 async function addCommentToPost(
-  postId: string,
-  comment: IPostCommentRequestDto,
+  commentData: IPostCommentRequestDto,
   userContext: IUserContext
 ): Promise<ITransformedCommentDto> {
-  const post = await PostService.getPost(postId)
+  const post = await PostService.getPost(commentData.postId)
 
   if (userContext.id != null) {
     const savedComment = await CommentRepository.saveComment({
-      ...comment,
+      text: commentData.text,
       author: new Types.ObjectId(userContext.id),
       post: new Types.ObjectId(post._id),
       created: new Date()
@@ -30,11 +29,11 @@ async function updatePostComment(
   commentId: string,
   text: string,
   userContext: IUserContext
-): Promise<void> {
+): Promise<ITransformedCommentDto> {
   const postComment = await CommentRepository.getComment(commentId)
   if (postComment?.author.id.toString() === userContext.id) {
-    await CommentRepository.updateComment(commentId, text)
-    return
+    await CommentRepository.updateComment(commentId, text); 
+    return await (await CommentRepository.getComment(commentId)).toJSON()
   }
 
   throw new GenericError('Cannot update comment made by another user')
