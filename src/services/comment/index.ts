@@ -32,8 +32,12 @@ async function updatePostComment(
 ): Promise<ITransformedCommentDto> {
   const postComment = await CommentRepository.getComment(commentId)
   if (postComment?.author._id.toString() === userContext.id) {
-    await CommentRepository.updateComment(commentId, text); 
-    return await (await CommentRepository.getComment(commentId)).toJSON()
+    const comment = await CommentRepository.updateComment(commentId, text)
+    if (comment != null) {
+      return await comment.toJSON()
+    }
+
+    throw new GenericError(`There is no comment with id ${commentId}`)
   }
 
   throw new GenericError('Cannot update comment made by another user')

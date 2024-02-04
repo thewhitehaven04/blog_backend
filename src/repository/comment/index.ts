@@ -15,9 +15,19 @@ async function saveComment(
   })
 }
 
-async function updateComment(id: string, commentText: string): Promise<void> {
-  await CommentModel.findByIdAndUpdate(id, {
-    $set: { text: commentText }
+async function updateComment(
+  id: string,
+  commentText: string
+): Promise<TPopulatedCommentDocument | null> {
+  return await CommentModel.findByIdAndUpdate(
+    id,
+    {
+      $set: { text: commentText }
+    },
+    { returnDocument: 'after' }
+  ).populate<{ author: ISecureUser }>({
+    path: 'author',
+    select: 'username email'
   })
 }
 

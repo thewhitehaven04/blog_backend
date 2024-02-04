@@ -1,4 +1,4 @@
-import { type FlattenMaps, Types } from 'mongoose'
+import { Types } from 'mongoose'
 import {
   type IUpdatePostRequestDto,
   type ICreatePostRequestDto
@@ -6,7 +6,6 @@ import {
 import {
   type IPostUpdateModel,
   type IPostCreateModel,
-  type IPostModel
 } from '../../models/post/types'
 import * as PostRepository from './../../repository/posts'
 import * as UserRepository from './../../repository/user'
@@ -55,10 +54,10 @@ async function updatePost(
 
 async function getPost(
   postId: string
-): Promise<FlattenMaps<IPostModel & { _id: Types.ObjectId }>> {
-  const post = (await PostRepository.getPost(postId))?.toJSON()
+): Promise<TPopulatedPostDocument> {
+  const post = (await PostRepository.getPost(postId))
   if (post != null) {
-    return post
+    return await post.toObject()
   }
 
   throw new GenericError(`There is no post with id '${postId}'`)
@@ -69,7 +68,8 @@ async function getFormattedPost(postId: string): Promise<IFormattedPostDto> {
   return {
     ...post,
     updated: post.updated != null ? formatISO(post.updated) : null,
-    published: formatISO(post.published)
+    published: formatISO(post.published),
+    author: post.author
   }
 }
 
@@ -95,7 +95,8 @@ async function getPosts(
       return {
         ...post.toJSON(),
         updated: post.updated != null ? formatISO(post.updated) : null,
-        published: formatISO(post.published)
+        published: formatISO(post.published),
+        author: post.author
       }
     })
   )
