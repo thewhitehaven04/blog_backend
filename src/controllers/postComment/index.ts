@@ -40,16 +40,16 @@ const updateCommentPost = [
   expressAsyncHandler(
     async (
       req: Request<{ commentId: string }, any, any>,
-      res: Response<TGenericResponse>
+      res: Response<TGenericResponse<ITransformedCommentDto>>
     ) => {
-      await CommentService.updatePostComment(
+      const comment = await CommentService.updatePostComment(
         req.params.commentId,
         req.body.text,
         req.context
       )
       res.json({
         success: true,
-        data: null
+        data: comment 
       })
     }
   )
