@@ -31,7 +31,7 @@ async function updatePostComment(
   userContext: IUserContext
 ): Promise<ITransformedCommentDto> {
   const postComment = await CommentRepository.getComment(commentId)
-  if (postComment?.author.id.toString() === userContext.id) {
+  if (postComment?.author._id.toString() === userContext.id) {
     await CommentRepository.updateComment(commentId, text); 
     return await (await CommentRepository.getComment(commentId)).toJSON()
   }
@@ -44,7 +44,7 @@ async function deletePostComment(
   userContext: IUserContext
 ): Promise<void> {
   const postComment = await CommentRepository.getComment(commentId)
-  if (postComment?.author.id.toString() === userContext.id) {
+  if (postComment?.author._id.toString() === userContext.id) {
     await CommentRepository.deleteComment(commentId)
     return
   }

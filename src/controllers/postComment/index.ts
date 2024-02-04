@@ -3,7 +3,8 @@ import { type Response, type Request } from 'express'
 import {
   type TGetPostCommentResponseDto,
   type IPostCommentRequestDto,
-  type ICommentRequestParams
+  type ICommentRequestParams,
+  type IUpdateCommentRequestDto
 } from './types'
 import * as CommentService from './../../services/comment'
 import { type TGenericResponse } from '../types/response'
@@ -36,10 +37,10 @@ const postCommentPost = [
 
 const updateCommentPost = [
   verifyTokenAndAttachAsContext,
-  validateRequest(checkSchema(updatePostRequestSchema)),
+  validateRequest(checkSchema(postCommentSchema)),
   expressAsyncHandler(
     async (
-      req: Request<{ commentId: string }, any, any>,
+      req: Request<{ commentId: string }, any, IUpdateCommentRequestDto>,
       res: Response<TGenericResponse<ITransformedCommentDto>>
     ) => {
       const comment = await CommentService.updatePostComment(

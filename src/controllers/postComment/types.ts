@@ -17,3 +17,7 @@ export interface ICommentRequestParams {
 export type TGetPostCommentResponseDto = TPaginatedResponse<
   ITransformedCommentDto
 >
+
+export interface IUpdateCommentRequestDto {
+  text: string
+}
