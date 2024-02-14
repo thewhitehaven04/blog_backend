@@ -1,9 +1,11 @@
+import { hash } from 'bcrypt'
 import { GenericError } from '../../appError'
 import { type ISignUpRequestDto } from '../../controllers/signup/types'
 import * as UserRepository from '../../repository/user'
+import APP_CONFIG from '../../appConfig'
 
 async function signUp(userCredentials: ISignUpRequestDto): Promise<void> {
-  const { username, email } = userCredentials
+  const { username, email, password } = userCredentials
   const usersWithDuplicateCredentials =
     await UserRepository.getUserByCredentials({ username, email })
 
@@ -24,7 +26,12 @@ async function signUp(userCredentials: ISignUpRequestDto): Promise<void> {
       `There is already a registered user with this username: ${username}`
     )
 
-  await UserRepository.createUser(userCredentials)
+  const hashedPassword = await hash(password, APP_CONFIG.salt)
+
+  await UserRepository.createUser({
+    ...userCredentials,
+    password: hashedPassword
+  })
 }
 
 export { signUp }

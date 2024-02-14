@@ -21,5 +21,5 @@ export function connectToDatabase(connectionString?: string): void {
 }
 
 export function setupRouting(app: Application, routerMap: TRouterMap): void {
-  routerMap.forEach((route) => app.use(route[0], route[1]))
+  routerMap.forEach(([path, router]) => app.use(path, router))
 }
